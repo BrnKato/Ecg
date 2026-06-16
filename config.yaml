@@ -1,0 +1,87 @@
+  # ============================
+  # CONFIGURAÇÃO DO PROCESSAMENTO DE ECG
+  # ============================
+
+  #  Exibir informações gráficas do sinal original (ECG)
+  # "plot"  -> apenas exibe os gráficos na tela
+  # "save"  -> apenas salva os gráficos em arquivos
+  # "both"  -> salva e plota os gráficos
+  # "none"  -> não exibe nem salvo os gráficos
+  gerar_graficos_ecg_completo: "none"
+
+  # Se gerar_graficos_ecg_completo == save ou both então
+  # O código cria a pasta "pasta_resultados_ecg_completo" automaticamente se ela não existir para gravar os arquivos com os gráficos gerados
+  pasta_resultados_ecg_completo: "resultados"
+
+  # Lista ordenada de filtros a serem aplicados (Filtros Savitz-Golay ou Butterworth passa-banda)
+  # Valores possíveis: "savgol", "butter"
+  # A ordem da esquerda para direita determina a sequência dos filtros
+  lista_filtros: ["savgol", "butter"]
+        
+  # Parâmetros do filtro Savitz-Golay (usado apenas se usar_filtro=True)
+  # janela_savitz: tamanho da janela (número ímpar)
+  # ordem_savitz: ordem do polinômio usado para suavização
+  janela_savitz: 29
+  ordem_savitz: 11      
+
+  # Parâmetros do filtro Butterworth
+  # ordem: ordem do filtro digital
+  # lowcut: frequência de corte inferior (Hz)
+  # highcut: frequência de corte superior (Hz)
+  butter_ordem: 4
+  butter_lowcut: 0.5
+  butter_highcut: 40.0
+
+  # Caminho absoluto para a pasta do conjunto de dados
+  caminho_mitbih: "C:/Users/bruno/Downloads/mit-bih-arrhythmia-database-1.0.0"
+
+  # O canal do sinal a ser processado
+  # Pode ser: MLII, V1, V2, V5, MCL1
+  sinal: MLII                             
+
+  # Processar todos os ECGs da pasta ou apenas registros específicos
+  # true  -> processa todos os registros da pasta
+  # false -> processa apenas os registros listados em registros_especificos
+  usar_todos_registros: false                         
+
+  # Se usar_todos_registros == true então especificar em "registros_especificos" a lista de ECGs a serem processados
+  # Cada registro deve ser uma string correspondente ao nome do arquivo (sem extensão), Ex. ["100","109"]
+  registros_especificos: ["100","107"]
+
+  # Pasta onde os csvs serão salvos
+  # O código cria a pasta automaticamente se ela não existir
+  pasta_csv: "C:/Users/bruno/Downloads/teste"
+
+  # Intervalo do sinal a ser processado
+  # true  -> processa apenas o trecho definido em 'intervalo'
+  # false -> processa o sinal completo
+  usar_intervalo: false                    
+
+  # Se usar_intervalo=true então
+  # Especificar como [inicio, fim], o intervalo de pontos para processamento
+  # Exemplo: [0, 10000] processa apenas o trecho entre essas amostras 0 a 10000
+  intervalo: [0, 5000]
+
+  # Ativar ou desativar ajuste das anotações para o pico do batimento
+  # true -> ajusta para o pico
+  # false -> usa anotação original
+  ajustar_pico: true                        
+
+  # ============================
+  # CONFIGURAÇÃO GERAL DE SEPARAÇÃO
+  # ============================
+  shift: 1                     # quantidade a avançar entre segmentos
+  gerar_graficos_segmentos: false  # se true, plota cada trecho separado
+  
+  # ============================
+  # CONFIGURAÇÃO DE SEPARAÇÃO POR QUANTIDADE DE BATIMENTOS
+  # ============================
+  usar_separacao_por_batimento: true  # true -> usa separação por quantidade de batimentos
+  num_batimentos: 3                   # número de picos R no segmento
+  inicio_batimento_heuristica: 0.2    # segundos antes do primeiro R para começar o segmento (Freq de amostragem * inicio_batimento_heuristica == quantidade de pontos antes do primeiro R)
+  fim_batimento_heuristica: 0.0       # segundos depois do último pico R para terminar o segmento (Freq de amostragem * fim_batimento_heuristica == quantidade de pontos após o último R)
+
+  # ============================
+  # CONFIGURAÇÃO PARA PLOTAR AS ETAPAS DO PAN-TOMPKINS
+  # ============================
+  plot_etapas_pan_tompkins: false    # true -> plota os gráficos das etapas pan-tompkins
